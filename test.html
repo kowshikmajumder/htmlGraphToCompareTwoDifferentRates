@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sine and Cosine Graph</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .chart-container {
+      width: 80%;
+      max-width: 800px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .controls {
+      margin-top: 20px;
+      text-align: center;
+    }
+    input {
+      padding: 10px;
+      margin: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="chart-container">
+    <canvas id="myChart"></canvas>
+    <div class="controls">
+      <label for="amplitude">Amplitude:</label>
+      <input type="number" id="amplitude" value="1" step="0.1">
+      <label for="frequency">Frequency:</label>
+      <input type="number" id="frequency" value="1" step="0.1">
+      <button onclick="updateGraph()">Update Graph</button>
+    </div>
+  </div>
+
+  <script>
+    // Initialize Chart.js
+    const ctx = document.getElementById('myChart').getContext('2d');
+    let myChart;
+
+    // Function to generate sine and cosine data
+    function generateData(amplitude, frequency) {
+      const data = {
+        labels: [],
+        sine: [],
+        cosine: []
+      };
+      for (let i = 0; i <= 360; i += 10) {
+        const radians = (i * Math.PI) / 180; // Convert degrees to radians
+        data.labels.push(i);
+        data.sine.push(amplitude * Math.sin(frequency * radians));
+        data.cosine.push(amplitude * Math.cos(frequency * radians));
+      }
+      return data;
+    }
+
+    // Function to update the graph
+    function updateGraph() {
+      const amplitude = parseFloat(document.getElementById('amplitude').value);
+      const frequency = parseFloat(document.getElementById('frequency').value);
+
+      const newData = generateData(amplitude, frequency);
+
+      // Update the chart data
+      myChart.data.labels = newData.labels;
+      myChart.data.datasets[0].data = newData.sine;
+      myChart.data.datasets[1].data = newData.cosine;
+      myChart.update();
+    }
+
+    // Initial data
+    const initialData = generateData(1, 1);
+
+    // Chart configuration
+    const config = {
+      type: 'line',
+      data: {
+        labels: initialData.labels,
+        datasets: [
+          {
+            label: 'Sine',
+            data: initialData.sine,
+            borderColor: '#36A2EB',
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderWidth: 2,
+            fill: false,
+          },
+          {
+            label: 'Cosine',
+            data: initialData.cosine,
+            borderColor: '#FF6384',
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderWidth: 2,
+            fill: false,
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true,
+            text: 'Sine and Cosine Graph'
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Angle (degrees)'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Value'
+            }
+          }
+        }
+      }
+    };
+
+    // Initialize the chart
+    myChart = new Chart(ctx, config);
+  </script>
+</body>
+</html>
