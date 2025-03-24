@@ -54,17 +54,17 @@
   <div class="chart-container">
     <canvas id="myChart"></canvas>
     <div class="controls">
-      <button onclick="updateDataset(0)">Toggle Line 1</button>
-      <button onclick="updateDataset(1)">Toggle Line 2</button>
+      <button onclick="updateDataset(0)">Toggle Rate 1</button>
+      <button onclick="updateDataset(1)">Toggle Rate 2</button>
 	 </div>  
 	  <div class="controls">
 	  <label for="rate1">Rate1:</label>
-      <input type="number" id="rate1" value="1" step="0.1">
+      <input type="number" id="rate1" value="8.5" step="0.1">
       <label for="rate2">Rate2:</label>
-      <input type="number" id="rate2" value="1" step="0.1">
-      
+      <input type="number" id="rate2" value="9" step="0.1">
+      <br>
 	  <label for="month">Month:</label>
-      <input type="number" id="month" value="1" step="0.1">
+      <input type="number" id="month" value="50" step="0.1">
       
 	  <button onclick="updateGraph()">Update Graph</button>
 
@@ -76,8 +76,8 @@
 
   <script>
       // Initialize Chart.js
-    //const ctx = document.getElementById('myChart').getContext('2d');
-    //let myChart;
+    const ctx = document.getElementById('myChart').getContext('2d');
+    let myChart;
 
    function generateData(rate, month,per) {
       let p=100;
@@ -119,7 +119,14 @@
 	  const data2 = generateData(r2, m,12);
 	  console.log(data1);
       // Update the chart data
-      //myChart.data.labels = newData.labels;
+	let t=m;
+	labelkm=[];
+	for(let i=1;i<=t;++i){
+	
+	labelkm.push(i);
+	
+	}
+      myChart.data.labels = labelkm;
       myChart.data.datasets[0].data = data1;
       myChart.data.datasets[1].data = data2;
       myChart.update();
@@ -132,7 +139,7 @@
 	let labelkm=[]
 	let t=100;
 	
-	for(let i=1;i<=t;++i){
+	for(let i=1;i<=t+1;++i){
 	
 	labelkm.push(i);
 	
@@ -146,7 +153,7 @@
       labels: labelkm,
       datasets: [
         {
-          label: 'Line 1',
+          label: 'Rate 1',
           data: rate1,
           borderColor: '#36A2EB',
           backgroundColor: 'rgba(54, 162, 235, 0.2)',
@@ -154,7 +161,7 @@
           fill: false,
         },
         {
-          label: 'Line 2',
+          label: 'Rate 2',
           data: rate2,
           borderColor: '#FF6384',
           backgroundColor: 'rgba(255, 99, 132, 0.2)',
@@ -188,7 +195,7 @@
     };
 
     // Initialize the chart
-    const myChart = new Chart(document.getElementById('myChart'), config);
+    myChart = new Chart(document.getElementById('myChart'), config);
 
     // Function to toggle dataset visibility
     function updateDataset(index) {
